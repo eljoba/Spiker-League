@@ -1,0 +1,36 @@
+.navigationbar {
+  position: fixed;
+  width: 100%;
+  background: #d3d3d3;
+  height: 56px;
+  top: 0;
+  left: 0;
+}
+
+.navbar__logo a {
+  text-decoration: none;
+  font-size: 1.5rem;
+  color: black;
+}
+
+.navbar__navigation {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  padding: 0 1rem;
+}
+
+.spacer {
+  flex: 1;
+}
+
+.navbar__logo a:hover,
+.navbar__logo a:active {
+  text-decoration: none;
+  color: white;
+}
+
+.loggedin_user:hover {
+  color: white;
+  cursor: pointer;
+}
