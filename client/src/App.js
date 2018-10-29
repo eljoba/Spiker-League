@@ -4,6 +4,18 @@ import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
 import Usermenu from "./components/UserMenu/Usermenu";
 import Message from "./components/Message/Message";
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
+
+const TodosQuery = gql`
+  {
+    todos {
+      id
+      text
+      complete
+    }
+  }
+`;
 
 class App extends Component {
   state = {
@@ -25,6 +37,11 @@ class App extends Component {
   };
 
   render() {
+    console.log(this.props);
+    const {
+      data: { loading, todos }
+    } = this.props;
+
     let userMenu;
     let messageMenu;
     if (this.state.userMenuOpen) {
@@ -35,6 +52,10 @@ class App extends Component {
     if (this.state.messageOpen) {
       messageMenu = <Message />;
     }
+    if (loading) {
+      return null;
+    }
+    console.log(todos);
     return (
       <div className="App">
         <Navbar menuClickHandler={this.menuToggleClickHandler} />
@@ -43,9 +64,14 @@ class App extends Component {
         <main style={{ marginTop: "64px" }}>
           <p>this us the content</p>
         </main>
+        <div>
+          {todos.map(todo => (
+            <div key={`${todo.id}-todo-item`}>{todo.text}</div>
+          ))}
+        </div>
       </div>
     );
   }
 }
 
-export default App;
+export default graphql(TodosQuery)(App);
