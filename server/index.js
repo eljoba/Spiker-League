@@ -14,11 +14,17 @@ const Announcement = mongoose.model("Announcement", {
   date_posted: Date
 });
 
+const UserLogin = mongoose.model("UserLogin", {
+  username: String,
+  password: String
+});
+
 const typeDefs = `
   type Query {
     hello(name: String): String!
     todos:[Todo]
     announcement:[Announcement]
+    userlogin(username:String!,password:String!):[UserLogin]
   }
   type Todo{
       id: ID!
@@ -31,6 +37,11 @@ const typeDefs = `
     text: String!
     date_posted: String
 }
+type UserLogin{
+  id: ID!
+  username: String!
+  password: String!
+}
   type Mutation{
       createTodo(text:String!): Todo
       updateTodo(id: ID!, complete: Boolean!) : Boolean
@@ -38,6 +49,8 @@ const typeDefs = `
       createAnnouncement(text:String!): Announcement
       updateAnnouncement(id: ID!, text:String!) : Boolean
       removeAnnouncement(id: ID!) : Boolean
+      createUserLogin(username:String!, password:String!): UserLogin
+      verifyUserLogin(username:String!, password:String!): [UserLogin]
   }
 `;
 
@@ -45,7 +58,13 @@ const resolvers = {
   Query: {
     hello: (_, { name }) => `Hello ${name || "World"}`,
     todos: () => Todo.find(),
-    announcement: () => Announcement.find()
+    announcement: () => Announcement.find(),
+    userlogin: async (_, { username, password }) => {
+      console.log(`${username}`);
+      const usern = `${username}`;
+      const pass = `${password}`;
+      return UserLogin.find({ username: usern, password: pass });
+    }
   },
   Mutation: {
     createTodo: async (_, { text }) => {
@@ -77,6 +96,20 @@ const resolvers = {
     removeAnnouncement: async (_, { id }) => {
       await Announcement.findByIdAndRemove(id);
       return true;
+    },
+    createUserLogin: async (_, { username, password }) => {
+      const userlogin = new UserLogin({
+        username,
+        password
+      });
+      await userlogin.save();
+      return userlogin;
+    },
+    verifyUserLogin: async (_, { username, password }) => {
+      console.log(`${username}`);
+      const usern = `${username}`;
+      const pass = `${password}`;
+      return UserLogin.find({ username: usern, password: pass });
     }
   }
 };

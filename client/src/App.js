@@ -4,6 +4,7 @@ import "./App.css";
 import Navbar from "./components/Navbar/Navbar";
 import Usermenu from "./components/UserMenu/Usermenu";
 import Message from "./components/Message/Message";
+import Login from "./components/Login/Login";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 
@@ -61,6 +62,7 @@ class App extends Component {
         <Navbar menuClickHandler={this.menuToggleClickHandler} />
         {userMenu}
         {messageMenu}
+        <Login />
         <main style={{ marginTop: "64px" }}>
           <p>this us the content</p>
         </main>
